@@ -8,4 +8,4 @@ async function getData(url) {
   }
 }
 
-console.error(await getData('http://localhost:3000/api/users'));
+console.log(await getData('http://localhost:3000/api/marged'));
