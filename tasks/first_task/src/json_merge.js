@@ -1,11 +1,10 @@
-import { writeFileSync } from 'fs';
+import { writeFile } from 'fs';
 async function getData(url) {
   try {
     const response = await fetch(url);
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Ошибка:', error);
+    console.error(error);
   }
 }
 
@@ -16,6 +15,7 @@ async function main() {
     const comments = await getData('https://jsonplaceholder.typicode.com/comments');
     
     let output = posts
+    
 
     for (const post in posts) {
         let comments_data = [];
@@ -26,8 +26,25 @@ async function main() {
         output[post]["comments"] = comments_data;
         }
     }
-    writeFileSync('tasks/first_tasks/outputs/output_js.json', JSON.stringify(output, null, 2));
-
+    writeFile('tasks/first_tasks/outputs/output_js.json', JSON.stringify(output, null, 2), (err) => {
+        if (err) {
+            console.error(err);
+        }
+    });
 }
 
-main()
+async function main1() {
+    
+    console.log("Начинаем получение данных...");
+    const posts = await getData('https://jsonplaceholder.typicode.com/posts');
+    const comments = await getData('https://jsonplaceholder.typicode.com/comments');
+
+
+    // console.log(comments);
+    posts.map(post => {
+        post.comments = comments.filter(comment => comment.postId === post.id);
+    });
+    console.log(posts)
+}
+
+main1()
