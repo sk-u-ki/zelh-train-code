@@ -1,15 +1,12 @@
-import putData from './repository/put.js';
-import getData from './repository/get.js';
-class Database {
-    constructor() {
-        this.data = [];
-    }
-    put(db, data) {
-        putData(db, data);
-    }
-    get(db, id="*") {
-        return getData(db, id);
-    }
-}
+import knex from 'knex';
 
-export default new Database();
+/**
+* @type {import('knex').Knex}
+*/
+export const database = knex({
+        client: 'sqlite3',
+        connection: {
+            filename: './database/database.sql',
+        },
+        useNullAsDefault: true,
+    });

@@ -1,5 +1,4 @@
-import fs from 'fs';
-import Database from '../../../database/index.js';
+import putData from '../../../database/repository/put.js';
 
 class DataLoader {
     async collectData(url, type) {
@@ -11,7 +10,7 @@ class DataLoader {
 
     loadData(res, type) {
         console.log("Saving data to database...");
-        Database.put(type, res);
+        putData(type, res);
     }
 }
 

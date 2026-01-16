@@ -1,13 +1,7 @@
-import knex from 'knex';
+import { database } from '../index.js';
 
-const getData = (db = null,id="*") => {
-    const database = knex({
-        client: 'sqlite3',
-        connection: {
-            filename: './database/database.sql',
-        },
-        useNullAsDefault: true,
-    });
+
+export default function getData(db = null,id="*") {
+
     return database(db).select().where(id==="*" ? {} : {id: id});
 }
-export default getData;
