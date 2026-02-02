@@ -8,11 +8,9 @@ export function up(knex) {
         table.increments('id').primary();
         table.string('username', 255).notNullable();
         table.string('password', 255).notNullable();
-        table.string('email', 255).notNullable();
-        table.unique('email');
         table.timestamp('createdAt').defaultTo(knex.fn.now());
         table.timestamp('updateAt').defaultTo(knex.fn.now());
-        })
+    })
 }
 
 /**

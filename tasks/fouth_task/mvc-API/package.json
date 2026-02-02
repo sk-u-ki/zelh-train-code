@@ -5,7 +5,10 @@
   "main": "app.js",
   "scripts": {
     "test": "nodemon app.js",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "migrate": "knex migrate:latest --knexfile ./database/migrations/knexfile.js",
+    "migrate:status": "knex migrate:status --knexfile ./database/migrations/knexfile.js",
+    "migrate:make": "knex migrate:make $NAME --knexfile ./database/migrations/knexfile.js"
   },
   "keywords": [],
   "author": "",
@@ -14,11 +17,14 @@
   "dependencies": {
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "handlebars": "^4.7.8",
     "jsonwebtoken": "^9.0.3",
     "knex": "^2.4.2",
     "lodash": "^4.17.21",
-    "mysql": "^2.18.1",
+    "nodemailer": "^7.0.12",
     "nodemon": "^2.0.22",
-    "sqlite3": "^5.1.6"
+    "sqlite3": "^5.1.6",
+    "uuid": "^13.0.0",
+    "zod": "^4.3.5"
   }
 }
