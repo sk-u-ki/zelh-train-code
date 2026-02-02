@@ -1,25 +1,19 @@
 import LoginService from '../services/loginServices.js';
+import { createUserDto } from '../../dto/create-user.dto.js';
 
 class authController {
-    async login(req, res, next) {
-        const { username, password } = req.body;
-        console.log("Controller: User login attempt...");
-
-        if (typeof username === 'string' && typeof password === 'string') {
-            res.json(await LoginService.login(username, password));
-        } else {
-            res.status(401).send({ message: 'Invalid credentials' });
-        }
+    async signin(req, res, next) {
+        const { username, password, email } = createUserDto.parse(req.body);
+        console.log("Controller: User sign in attempt...");
+        res.json(await LoginService.signin(username, password, email));
+        
+        //validation
     }
     async signup(req, res, next) {
-        const { username, password } = req.body;
-        console.log("Controller: User signup attempt...");
-        if (typeof username === 'string' && typeof password === 'string') {
-            const result = await LoginService.signup(username, password);
-            res.status(201).send({ message: result.message });
-        } else {
-            res.status(400).send({ message: 'Invalid data provided' });
-        }
+        const { username, password, email} = createUserDto.parse(req.body);
+        console.log("Controller: User sign up attempt...");
+        const result = await LoginService.signup(username, password, email);
+        res.status(201).send({ message: result.message });    
     }
 }
 

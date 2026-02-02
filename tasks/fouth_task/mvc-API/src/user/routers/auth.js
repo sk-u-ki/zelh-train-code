@@ -1,12 +1,11 @@
 import express from 'express';
 
 import authController from '../controllers/authController.js';
-import middleware from '../../middlewares/auth.middleware.js';
 
-const auth = express.Router();
+const authRouter = express.Router();
 
-auth.post('/signin', (req, res, next) => authController.login(req, res, next));
+authRouter.post('/sign-in', (req, res, next) => authController.signin(req, res, next));
 
-auth.post('/signup', (req, res, next) => authController.signup(req, res, next));
+authRouter.post('/sign-up', (req, res, next) => authController.signup(req, res, next));
 
-export default auth;
+export default authRouter;

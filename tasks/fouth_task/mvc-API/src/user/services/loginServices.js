@@ -1,40 +1,30 @@
-import hashFunction from '../../../database/repository/hash.js';
-import UserRepository from '../../../database/repository/user.repository.js';
-import jwt from 'jsonwebtoken';
+import hashFunction from '../../utils/hash.js';
+import {checkUser, createUser} from '../../../database/repository/user.repository.js';
 import lodash from 'lodash';
+import {generateToken} from '../../utils/jwt.js';
 
-const userCurrent = UserRepository;
 class LoginService {
-    async login(username, pass) {
+    async signin(username, pass, email) {
         console.log("Service: Processing login...");
         const hashedPassword = hashFunction.hash(pass);
-        
-        const user = await userCurrent.checkUser(username, hashedPassword);
+        const user = await checkUser(email, hashedPassword);
         
         if (!user) {
             return { success: false, message: 'Invalid credentials' };
         }
+        const accessToken = generateToken({data: lodash.omit(user, 'password')});
+        const refreshToken = generateToken({data: lodash.omit(user, 'password'), expTime:'7d'});
 
-        const token = jwt.sign(
-            lodash.omit(user, 'password'),
-            process.env.JWT_SECRET,
-            { expiresIn: '50s' }
-        );
-
-        return { accessToken: token};
-
+        return { accessToken, refreshToken };
     }
-    async signup(name, pass) {  
+    async signup(name, pass, email) {  
         console.log("Service: Processing signup...");
-        const hashedPassword = await hashFunction.hash(pass);
-        const isExist = await createUser(name, hashedPassword);
-        //const isExist = await checkUser('users', name);
-        if (isExist) {
-
-            return { success: false, message: 'User already exists' };
+        const hashedPassword = hashFunction.hash(pass);
+        const isNotExist = await createUser(name, hashedPassword, email);
+        if (isNotExist) {
+            return { success: true, message: isNotExist??'Signup successful' };       
         }
-
-        return { success: true, message: isExist??'Signup successful' };       
+        return { success: false, message: 'User already exists' };
     }
 }
 
